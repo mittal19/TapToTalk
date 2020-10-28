@@ -4,9 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import AysncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import {AuthContext} from './context';
-import {Phonenumbercomponent} from './screen/Phonenumbercomponent';
-import {homecomponent} from './screen/homecomponent';
-import {Otpcomponent} from './screen/Otpcomponent';
+import {Phonenumbercomponent} from './components/Phonenumbercomponent';
+import {homecomponent} from './components/homecomponent';
+import {Otpcomponent} from './components/Otpcomponent';
 
 const Stack = createStackNavigator();
 
