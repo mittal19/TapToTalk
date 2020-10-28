@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {AuthContext} from './context';
 import {Phonenumbercomponent} from './screen/Phonenumbercomponent';
 import {homecomponent} from './screen/homecomponent';
+import {Otpcomponent} from './screen/Otpcomponent';
 
 const Stack = createStackNavigator();
 
@@ -56,8 +57,6 @@ function App()
 
   const authContext = React.useMemo(()=>({
     signIn: async(userPhone,password)=> {
-      //setUserToken('asdf');
-      //setIsLoading(false);
       let userToken;
       userToken = null;
       if(userPhone=='user'&&password=='pass')
@@ -118,6 +117,7 @@ function App()
       {loginState.userToken == null ? 
         <Stack.Navigator>
           <Stack.Screen name="Phone Number" component={Phonenumbercomponent} />
+          <Stack.Screen name="OTP" component={Otpcomponent} />
         </Stack.Navigator>
         :
         <Stack.Navigator>

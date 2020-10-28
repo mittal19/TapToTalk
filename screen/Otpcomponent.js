@@ -1,14 +1,26 @@
 import React,{Component} from 'react';
-import {View,Text,TextInput,TouchableOpacity} from 'react-native';
-import {AuthContext} from '../context';
+import {View,Text,TextInput,TouchableOpacity,ToastAndroid} from 'react-native';
 
-export function Otpcomponent()
+
+export function Otpcomponent({route,navigation})
 {
+  const {Phonenumber} = route.params;
+  
+  const otpnotrecieved=()=>{
+    ToastAndroid.show('Enter phone number and Try Again',ToastAndroid.LONG);
+    navigation.goBack();
+  } 
 
   return(
     <View>
-      <Text>HOME</Text>
-      <TouchableOpacity onPress={signOut}><Text>Logout</Text></TouchableOpacity>
+      <Text>Enter OTP</Text>
+      <TextInput placeholder="_" />
+      <TextInput placeholder="_" />
+      <TextInput placeholder="_" />
+      <TextInput placeholder="_" />
+      <TouchableOpacity ><Text>Enter</Text></TouchableOpacity>
+      <Text>OR</Text>
+      <TouchableOpacity onPress={otpnotrecieved}><Text>Didn't recieved OTP on {Phonenumber} ?</Text></TouchableOpacity>
     </View>
   );
 

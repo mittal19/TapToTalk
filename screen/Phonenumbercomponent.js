@@ -1,20 +1,24 @@
-import React,{Component} from 'react';
-import {View,Text,TextInput,TouchableOpacity} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-community/async-storage';
-import {AuthContext} from '../context';
+import React from 'react';
+import {View,Text,TextInput,TouchableOpacity,ToastAndroid} from 'react-native';
 
-export function Phonenumbercomponent()
+export function Phonenumbercomponent({navigation})
 {
   
   const [userPhone,setuserPhone] = React.useState('');
-  const [password,setPassword] = React.useState('');
-  const {signIn} = React.useContext(AuthContext);
 
-  const loginhandle = ()=>{
+  const sendOTPhandle = ()=>{
 
-    signIn(userPhone,password);
+    if( !(/^\d+$/.test(userPhone)) || userPhone.length<10 )
+    {  
+      console.log(false);
+      ToastAndroid.show("Enter a number with 10 digits only!", ToastAndroid.LONG);
+    }
+    else
+    {
+      console.log(true);
+      navigation.push('OTP',{Phonenumber:userPhone});
+    }
+    
   }
 
   return(
@@ -25,13 +29,8 @@ export function Phonenumbercomponent()
         onChangeText={setuserPhone}
         maxLength={10}
       />
-      <TextInput
-        placeholder="Enter Password"
-        onChangeText={setPassword}
-        secureTextEntry={true}
-      />
-     <TouchableOpacity onPress={loginhandle}>
-      <Text>PRESS</Text>
+     <TouchableOpacity onPress={sendOTPhandle}>
+      <Text>Send OTP</Text>
      </TouchableOpacity>
     </View>
   );
