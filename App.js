@@ -1,5 +1,5 @@
-import React,{Component,useEffect,useReducer} from 'react';
-import {View,Text,TextInput,TouchableOpacity, ActivityIndicator} from 'react-native';
+import React,{useEffect} from 'react';
+import {View,ActivityIndicator} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AysncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -133,4 +133,4 @@ function App()
   );
 }
 
-export default App;
+export default App; 
