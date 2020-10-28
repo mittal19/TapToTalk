@@ -4,24 +4,22 @@ import { NavigationContainer } from '@react-navigation/native';
 import AysncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import {AuthContext} from './context';
-import {Signincomponent} from './screen/Signincomponent';
+import {Phonenumbercomponent} from './screen/Phonenumbercomponent';
 import {homecomponent} from './screen/homecomponent';
 
 const Stack = createStackNavigator();
 
 function App()
 {
-  
-  //const [isLoading,setIsLoading] = React.useState(true);
-  //const [userToken,setUserToken] = React.useState(null);
-
-  const initialLogin = {
+  const initialLogin = 
+  {
     isLoading:true,
-    userName:null,
+    userPhone:null,
     userToken:null
   };
 
-  const loginReducer = (prevState,action)=>{
+  const loginReducer = (prevState,action)=>
+  {
     switch(action.type)
     {
       case 'RETRIEVE_TOKEN':
@@ -35,21 +33,21 @@ function App()
           ...prevState,
           userToken:action.token,
           isLoading:false,
-          userName:action.id
+          userPhone:action.id
         };
       case 'LOGOUT':
         return {
           ...prevState,
           userToken:null,
           isLoading:false,
-          userName:null
+          userPhone:null
         };
       case 'REGISTER':
         return {
           ...prevState,
           userToken:action.token,
           isLoading:false,
-          userName:action.id
+          userPhone:action.id
         };
     }
   };
@@ -57,12 +55,12 @@ function App()
   const [loginState,dispatch] = React.useReducer(loginReducer,initialLogin);
 
   const authContext = React.useMemo(()=>({
-    signIn: async(userName,password)=> {
+    signIn: async(userPhone,password)=> {
       //setUserToken('asdf');
       //setIsLoading(false);
       let userToken;
       userToken = null;
-      if(userName=='user'&&password=='pass')
+      if(userPhone=='user'&&password=='pass')
       {
         try{
           userToken='sdf';
@@ -72,12 +70,10 @@ function App()
           console.log(e);
         }
       }
-      dispatch({type:'LOGIN',id:userName,token:userToken});
+      dispatch({type:'LOGIN',id:userPhone,token:userToken});
     },
     signOut: async()=> {
-      //setUserToken(null);
-      //setIsLoading(false);
-      
+     
       try{
         await AysncStorage.removeItem('userToken');
       } catch(e){
@@ -94,7 +90,7 @@ function App()
 
   useEffect(()=>{
     setTimeout(async()=>{
-      //setIsLoading(false);
+      
       let userToken = null;
      
       try{
@@ -121,7 +117,7 @@ function App()
       <NavigationContainer>
       {loginState.userToken == null ? 
         <Stack.Navigator>
-          <Stack.Screen name="Sign in" component={Signincomponent} />
+          <Stack.Screen name="Phone Number" component={Phonenumbercomponent} />
         </Stack.Navigator>
         :
         <Stack.Navigator>

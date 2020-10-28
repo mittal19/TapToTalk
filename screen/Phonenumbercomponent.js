@@ -5,24 +5,32 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AuthContext} from '../context';
 
-export function Signupcomponent()
+export function Phonenumbercomponent()
 {
   
-  const [phone,setPhone] = React.useState('');
+  const [userPhone,setuserPhone] = React.useState('');
   const [password,setPassword] = React.useState('');
   const {signIn} = React.useContext(AuthContext);
+
+  const loginhandle = ()=>{
+
+    signIn(userPhone,password);
+  }
 
   return(
     <View>
       <TextInput
-        placeholder="Phone number"
-        onChangeText={setPhone}
+        placeholder="Enter 10 digit Phone number"
+        keyboardType='phone-pad'
+        onChangeText={setuserPhone}
+        maxLength={10}
       />
       <TextInput
-        placeholder="Password"
+        placeholder="Enter Password"
         onChangeText={setPassword}
+        secureTextEntry={true}
       />
-     <TouchableOpacity onPress={signIn}>
+     <TouchableOpacity onPress={loginhandle}>
       <Text>PRESS</Text>
      </TouchableOpacity>
     </View>
