@@ -4,7 +4,8 @@ import {View,Text,TextInput,TouchableOpacity,ToastAndroid} from 'react-native';
 
 export function Otpcomponent({route,navigation})
 {
-  const {Phonenumber} = route.params;
+  const {Phonenumber,requestId} = route.params;
+  console.log(Phonenumber+" "+requestId);
   
   const otpnotrecieved=()=>{
     ToastAndroid.show('Enter phone number and Try Again',ToastAndroid.LONG);
