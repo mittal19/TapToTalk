@@ -35,7 +35,7 @@ export function Phonenumbercomponent({navigation})
         navigation.navigate('OTP',{Phonenumber:userPhone,requestId:otp.requestId});
       }catch(err)
       {
-        //console.log(err);
+        console.log(err);
         otpsent(false);
         ToastAndroid.show("Some error occurred. Try again.",ToastAndroid.LONG);
       }
