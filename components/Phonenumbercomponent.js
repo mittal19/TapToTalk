@@ -29,7 +29,7 @@ export function Phonenumbercomponent({navigation})
                             body: JSON.stringify({"number":"+919027504141"})
                             });
         const otp= await temp.json();
-        //console.log(otp);
+        console.log(otp);
         ToastAndroid.show("OTP sent",ToastAndroid.SHORT);
         otpsent(false);
         navigation.navigate('OTP',{Phonenumber:userPhone,requestId:otp.requestId});
