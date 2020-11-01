@@ -26,13 +26,16 @@ export function Phonenumbercomponent({navigation})
                               'Accept': 'application/json',
                               'Content-type': 'application/json'
                             },
-                            body: JSON.stringify({"number":"+919027504141"})
+                            body: JSON.stringify(
+                              {
+                                "number":"+919027504141"  // "+91"+userPhone
+                              })
                             });
-        const otp= await temp.json();
-        console.log(otp);
+        const requestId= await temp.json();
+        console.log(requestId);
         ToastAndroid.show("OTP sent",ToastAndroid.SHORT);
         otpsent(false);
-        navigation.navigate('OTP',{Phonenumber:userPhone,requestId:otp.requestId});
+        navigation.navigate('OTP',{Phonenumber:userPhone,requestId:requestId.requestId});
       }catch(err)
       {
         console.log(err);
