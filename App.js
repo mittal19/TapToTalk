@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react';
-import {View,ActivityIndicator} from 'react-native';
+import {View,ActivityIndicator,ToastAndroid} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AysncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -15,7 +15,7 @@ function App()
   const initialLogin = 
   {
     isLoading:true,
-    userPhone:null,
+    Phonenumber:null,
     userToken:null
   };
 
@@ -34,21 +34,21 @@ function App()
           ...prevState,
           userToken:action.token,
           isLoading:false,
-          userPhone:action.id
+          Phonenumber:action.id
         };
       case 'LOGOUT':
         return {
           ...prevState,
           userToken:null,
           isLoading:false,
-          userPhone:null
+          Phonenumber:null
         };
       case 'REGISTER':
         return {
           ...prevState,
           userToken:action.token,
           isLoading:false,
-          userPhone:action.id
+          Phonenumber:action.id
         };
     }
   };
@@ -56,20 +56,56 @@ function App()
   const [loginState,dispatch] = React.useReducer(loginReducer,initialLogin);
 
   const authContext = React.useMemo(()=>({
-    signIn: async(userPhone,password)=> {
+    signIn: async(requestId,otp,Phonenumber,navigation)=> {
       let userToken;
       userToken = null;
-      if(userPhone=='user'&&password=='pass')
+      
+      try
       {
-        try{
-          userToken='sdf';
-          await AysncStorage.setItem('userToken',userToken);
-        }catch(e)
+        console.log('idsnf');
+        const temp = await fetch('http://192.168.43.13:3000/verify',{
+                                method:'POST',
+                                headers:{
+                                  'Accept': 'application/json',
+                                  'Content-type': 'application/json'
+                                },
+                                setTimeout:500,
+                                body:JSON.stringify(
+                                {
+                                  "requestId":requestId,
+                                  "code":otp
+                                })
+                              });
+        console.log('dfsfs');
+        const res = await temp.json();
+        console.log('fsddf');
+        console.log(res);
+        //verifyotp(false);
+        if(res.status==0&&res.event_id!=null)
         {
-          console.log(e);
+          //console.log("success");
+          userToken='weef';
+          await AysncStorage.setItem('userToken',userToken);
         }
+        else if(res.status==16&&res.error_text=="The code provided does not match the expected value")
+        {
+          ToastAndroid.show("Wrong OTP entered! Try again.",ToastAndroid.LONG);
+        }
+        else
+        {
+          ToastAndroid.show("Some error occured! Try again,",ToastAndroid.LONG);
+          navigation.goBack();
+        }
+
+      }catch(error)
+      {
+        console.log(error);
+        //verifyotp(false);
+        ToastAndroid.show("Some error occured! Try again,",ToastAndroid.LONG);
+        navigation.goBack();
       }
-      dispatch({type:'LOGIN',id:userPhone,token:userToken});
+
+      dispatch({type:'LOGIN',id:Phonenumber,token:userToken});
     },
     signOut: async()=> {
      

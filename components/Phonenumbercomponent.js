@@ -12,12 +12,12 @@ export function Phonenumbercomponent({navigation})
 
     if( !(/^\d+$/.test(userPhone)) || userPhone.length<10 )
     {  
-      //console.log(false);
+      console.log(false);
       ToastAndroid.show("Enter a number with 10 digits only!", ToastAndroid.LONG);
     }
     else
     {
-      //console.log(true);
+      console.log(true);
       try{
         otpsent(true);
         const temp = await fetch('http://192.168.43.13:3000/request',{   //go in dev settings of phone by open developer mode by typing d in nodejs server then go to debug server host and enter ip adreess like 192.168.43.13:8081 . here 8081 is mobile port number. keep local host port number 3000
