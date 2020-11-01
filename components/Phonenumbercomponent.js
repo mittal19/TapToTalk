@@ -56,6 +56,7 @@ export function Phonenumbercomponent({navigation})
       <TextInput
         placeholder="Enter 10 digit Phone number"
         keyboardType='phone-pad'
+        value={userPhone}
         onChangeText={setuserPhone}
         maxLength={10}
       />

@@ -9,11 +9,12 @@ export function Otpcomponent({route,navigation})
   const {Phonenumber,requestId} = route.params;
   console.log(Phonenumber+" "+requestId);
   
+  const [otpentered,enterotp] = React.useState(false);
+
   const otpnotrecieved=()=>{
     ToastAndroid.show('Enter phone number and Try Again',ToastAndroid.LONG);
     navigation.goBack();
-  } 
-
+  }
 
   return(
     <View>
@@ -25,14 +26,19 @@ export function Otpcomponent({route,navigation})
           keyboardType="phone-pad"
           codeInputFieldStyle={{width:30,height: 45,borderWidth: 0,borderBottomWidth: 1,color:'#000000'}}
           codeInputHighlightStyle={{borderColor: "#000000"}}
+          onCodeChanged = {(code)=>{
+            if(code.length<4)
+              enterotp(false);
+          }}
           onCodeFilled = {(code) => {
-            console.log(`Code is ${code}, you are good to go!`)
-            }}
+            enterotp(true);
+          }}
           />
-        <TouchableOpacity ><Text>Enter</Text></TouchableOpacity>
+
+        <TouchableOpacity style={[{backgroundColor:otpentered?"#00FF00":"#f0f0f0"}]}><Text>Login</Text></TouchableOpacity>
         <Text>OR</Text>
         <TouchableOpacity onPress={otpnotrecieved}><Text>Didn't recieved OTP on {Phonenumber} ?</Text></TouchableOpacity>
-
+ 
     </View>
   );
 
