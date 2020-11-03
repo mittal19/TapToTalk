@@ -7,6 +7,7 @@ import {AuthContext} from './context';
 import {Phonenumbercomponent} from './components/Phonenumbercomponent';
 import {homecomponent} from './components/homecomponent';
 import {Otpcomponent} from './components/Otpcomponent';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
 
@@ -27,7 +28,8 @@ function App()
         return {
           ...prevState,
           userToken:action.token,
-          isLoading:false
+          isLoading:false,
+          Phonenumber:action.id
         };
       case 'LOGIN':
         return {
@@ -62,8 +64,8 @@ function App()
       
       try
       {
-        console.log('idsnf');
-        const temp = await fetch('http://192.168.43.13:3000/verify',{
+       // console.log('idsnf');
+        /*const temp = await fetch('http://192.168.43.13:3000/verify',{
                                 method:'POST',
                                 headers:{
                                   'Accept': 'application/json',
@@ -75,16 +77,18 @@ function App()
                                   "requestId":requestId,
                                   "code":otp
                                 })
-                              });
-        console.log('dfsfs');
-        const res = await temp.json();
-        console.log('fsddf');
-        console.log(res);
+                              });*/
+        //console.log('dfsfs');
+        //const res = await temp.json();
+        //console.log('fsddf');
+        //console.log(res);
+        const res = {status:0,event_id:4252};
         if(res.status==0&&res.event_id!=null)
         {
           //console.log("success");
           userToken='weef';
           await AysncStorage.setItem('userToken',userToken);
+          await AsyncStorage.setItem('Phonenumber',Phonenumber);
         }
         else if(res.status==16&&res.error_text=="The code provided does not match the expected value")
         {
@@ -110,6 +114,7 @@ function App()
      
       try{
         await AysncStorage.removeItem('userToken');
+        await  AsyncStorage.removeItem('Phonenumber');
       } catch(e){
         console.log(e);
       }
@@ -126,14 +131,16 @@ function App()
     setTimeout(async()=>{
       
       let userToken = null;
+      let Phonenumber = null;
      
       try{
         userToken=await AysncStorage.getItem('userToken');
+        Phonenumber=await AsyncStorage.getItem('Phonenumber');
       } catch(e){
         console.log(e);
       }
       
-      dispatch({type:'RETRIEVE_TOKEN',token:userToken});
+      dispatch({type:'RETRIEVE_TOKEN',token:userToken,id:Phonenumber});
     },1000);
   },[]);
 

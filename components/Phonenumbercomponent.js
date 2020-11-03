@@ -20,7 +20,7 @@ export function Phonenumbercomponent({navigation})
       console.log(true);
       try{
         otpsent(true);
-        const temp = await fetch('http://192.168.43.13:3000/request',{   //go in dev settings of phone by open developer mode by typing d in nodejs server then go to debug server host and enter ip adreess like 192.168.43.13:8081 . here 8081 is mobile port number. keep local host port number 3000
+        /*const temp = await fetch('http://192.168.43.13:3000/request',{   //go in dev settings of phone by open developer mode by typing d in nodejs server then go to debug server host and enter ip adreess like 192.168.43.13:8081 . here 8081 is mobile port number. keep local host port number 3000
                             method:'POST',
                             headers: {
                               'Accept': 'application/json',
@@ -32,10 +32,10 @@ export function Phonenumbercomponent({navigation})
                               })
                             });
         const requestId= await temp.json();
-        console.log(requestId);
+        console.log(requestId);*/
         ToastAndroid.show("OTP sent",ToastAndroid.SHORT);
         otpsent(false);
-        navigation.navigate('OTP',{Phonenumber:userPhone,requestId:requestId.requestId});
+        navigation.navigate('OTP',{Phonenumber:userPhone,requestId:12323});
       }catch(err)
       {
         console.log(err);
