@@ -80,7 +80,6 @@ function App()
         const res = await temp.json();
         console.log('fsddf');
         console.log(res);
-        //verifyotp(false);
         if(res.status==0&&res.event_id!=null)
         {
           //console.log("success");
