@@ -28,13 +28,26 @@ export default class firebasetemp extends Component
 
     getuser=async()=>
     {
-        console.log('in');
         var database=firebase.database();
-        var ref=database.ref();
-        ref.on('value',snap=>{
-            console.log(snap.key);
+        var ref=database.ref('customers');
+        var customers = await ref.once('value').then(function(snap){
+            snap = snap.val();
+            return snap;
         });
 
+        //console.log(customers);
+        customers= Object.keys(customers)
+        console.log(customers);
+        var mynumber = "9027504441";
+        var res = customers.find(customers=>customers==mynumber);   ///finding
+        console.log(res);
+
+        if(res==undefined)
+        {
+            var updates={};
+            updates['/test/ffste']='sgdsgs';
+            console.log(await database.ref().update(updates));   //updating
+        }
     }
     render()
     {
