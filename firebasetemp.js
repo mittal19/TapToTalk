@@ -46,7 +46,7 @@ export default class firebasetemp extends Component
         {
             var updates={};
             updates['/test/ffste']='sgdsgs';
-            console.log(await database.ref().update(updates));   //updating
+            console.log(await database.ref().update(updates));   //updating or add
         }
     }
     render()
