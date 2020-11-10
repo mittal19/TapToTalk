@@ -7,6 +7,7 @@ import {AuthContext} from './context';
 import {Phonenumbercomponent} from './components/Phonenumbercomponent';
 import {homecomponent} from './components/homecomponent';
 import {Otpcomponent} from './components/Otpcomponent';
+import {contactscomponent} from './components/contactscomponent';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const Stack = createStackNavigator();
@@ -164,6 +165,7 @@ function App()
         :
         <Stack.Navigator>
           <Stack.Screen name="Home" component={homecomponent} />
+          <Stack.Screen name="Contacts" component={contactscomponent} />
         </Stack.Navigator>
       }
       </NavigationContainer>

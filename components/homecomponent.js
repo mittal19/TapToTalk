@@ -7,12 +7,9 @@ import {AuthContext} from '../context';
 //import firebase from "firebase";
 //import firestore from "@react-native-firebase/firestore";
 
-export function homecomponent()
+export function homecomponent({navigation})
 {
  
-
-
-
   const {signOut} = React.useContext(AuthContext);
 
   useEffect(()=>{
@@ -27,9 +24,14 @@ export function homecomponent()
     functioname();
     }, []);
 
+  const checkcontacts = async()=>{
+    navigation.navigate('Contacts');
+  }
+
   return(
     <View>
       <Text>HOME</Text>
+      <TouchableOpacity onPress={checkcontacts} ><Text>CONTACTS</Text></TouchableOpacity>
       <TouchableOpacity onPress={signOut}><Text>Logout</Text></TouchableOpacity>
       
     </View>

@@ -7,4 +7,4 @@ import App from './App';
 import firebasetemp from './firebasetemp';
 import {name as appName} from './app.json';
 
-AppRegistry.registerComponent(appName, () => firebasetemp);
+AppRegistry.registerComponent(appName, () => App);
