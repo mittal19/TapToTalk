@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react';
-import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroid,ActivityIndicator} from 'react-native';
+import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroid,ActivityIndicator, ToastAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export function contactscomponent()
 {
@@ -22,22 +23,52 @@ export function contactscomponent()
             {
               Contacts.getAll().then(contacts=>
                 {
-                  setData(contacts)
+                  contacts.sort(function(a, b){
+                    //var temp=a.displayName.toLowerCase();
+                    console.log(typeof b.displayName);
+                    return a.displayName>b.displayName;
+                  });
+                  setData(contacts);
+                  setLoading(false);
+                  
+                  var data = [];
+                  var id=0;
+                  for(var i=0; i<contacts.length; i++)  
+                  {
+                    if(contacts[i].phoneNumbers.length!=0)
+                    {
+                      data.push(
+                                  {
+                                    id:id, 
+                                    displayName: contacts[i].displayName, 
+                                    phoneNumber: contacts[i].phoneNumbers[0].number, 
+                                    onWhatsapp:false
+                                  }
+                                );
+                      id++;
+                    }
+                  }
+                  console.log(JSON.stringify(data,null,'\t'));
+                  console.log(data.length);
+                  
                 }
               ); 
-                console.log(JSON.stringify({data},null,'\t'))
-              setLoading(false);
             }
             else 
             {
-              console.log("permission denied")
+              console.log("permission denied");
+              navigation.goBack();
+              ToastAndroid.show("Permission to access contacts denied",ToastAndroid.LONG);
             }
           }
           catch (err) 
           {
-            console.warn(err)
+            console.log(err);
+            navigation.goBack();
+            ToastAndroid.show("Some error occured",ToastAndroid.LONG);
           }
         }
+        
       }
       functionname();
     },[]);
