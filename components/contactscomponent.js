@@ -42,17 +42,24 @@ export function contactscomponent()
       functionname();
     },[]);
 
+  if(isLoading==true)
+  {
+    return(
+      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <ActivityIndicator size="large" color="#000000"/>
+      </View>
+    );
+  }
+
   return( 
     <View style={{ flex: 1, padding: 24 }}>
-      {isLoading ? <ActivityIndicator/> : (
-        <FlatList
+      <FlatList
           data={data}
           keyExtractor={({ recordID }, index) => recordID}
           renderItem={({ item }) => (
             <Text>{item.displayName}</Text>
           )}
         />
-      )}
     </View>
   );
 }
