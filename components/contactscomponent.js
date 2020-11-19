@@ -7,7 +7,20 @@ import React,{useEffect,useState} from 'react';
 import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroid,ActivityIndicator, ToastAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
 import AsyncStorage from '@react-native-community/async-storage';
-import { set } from 'react-native-reanimated';
+import * as firebase from 'firebase';
+
+var firebaseConfig = {
+  apiKey: "AIzaSyCi1keL-EFQAFXooPa0or-XHyOrtu5iSoY",
+  authDomain: "taptotalk-113dd.firebaseapp.com",
+  databaseURL: "https://taptotalk-113dd.firebaseio.com",
+  projectId: "taptotalk-113dd",
+  storageBucket: "taptotalk-113dd.appspot.com",
+  messagingSenderId: "526283056723",
+  appId: "1:526283056723:web:061d836d82fc6305a988a6",
+  measurementId: "G-7HFEC2PNE6"
+};
+if(!firebase.apps.length)
+    firebase.initializeApp(firebaseConfig);
 
 export function contactscomponent()
 {
@@ -19,6 +32,9 @@ export function contactscomponent()
   {
       async function functionname()   //creating a function with name of 'functionname' 
       {
+
+        const dbref = firebase.database().ref();
+
         if (Platform.OS == 'android') 
         {
           try 
@@ -27,10 +43,11 @@ export function contactscomponent()
             
             if (granted === PermissionsAndroid.RESULTS.GRANTED)   // if permission is granted
             {
-              Contacts.getAll().then(contacts=>     //Contacts.getAll wil get us phone contacts
-                {
-                  var data = [];  // making data array to store filtered contacts
-                  var id=0;   // index to add in object
+              var id=0;   // index to add in object
+              var data=[];    // making data array to store filtered contacts
+              
+              await Contacts.getAll().then(contacts=>     //Contacts.getAll wil get us phone contacts
+                {     
                   for(var i=0; i<contacts.length; i++)   //looping 
                   { 
                     if(contacts[i].phoneNumbers.length!=0)   // preventing to add contacts with no phone number
@@ -40,6 +57,7 @@ export function contactscomponent()
                                     id:id, 
                                     displayName: contacts[i].displayName, 
                                     phoneNumber: contacts[i].phoneNumbers[0].number, 
+                                    profile: "linkhere",
                                     onWhatsapp : "false"
                                   }  //making object of information before adding to array
                                 );  // adding valid contacts to data array
@@ -51,17 +69,22 @@ export function contactscomponent()
                     return a.displayName.toLowerCase()>b.displayName.toLowerCase();
                   });   // sorting the data array of objects we built above ignoring upper lower case
 
-                  setData(data); // set above data array to context
-                  setLoading(false);  // setting activity indicator to false
-                  
-                  setTimeout(()=>{
-                    data = [{id:0,displayName:"pstt",phoneNumber:"w5e6",onWhatsapp:"false"}];
-                    setData(data);
-                    setLoading(false);    
-                  },10000);
-
+                  setData(data); // set above data array to context till now we have filtered contacts only not checked whether number is on our database or not.
+                  setLoading(false);  // setting activity indicator to false  
                 }
-              ); 
+              );
+
+              for(var i=0;i<id;i++)
+              {
+                console.log(data[i].phoneNumber);
+                const userdata = await dbref.child('users').child(data[i].phoneNumber).once('value').then(
+                function(snap)
+                {
+                  snap = snap.val();
+                  return snap;
+                });
+                console.log(userdata);
+              }
             }
             else 
             {
@@ -97,7 +120,7 @@ export function contactscomponent()
     <View style={{ flex: 1, padding: 24 }}>
       <FlatList
           data={data}     // data state we created above
-          keyExtractor={({ id }, index) => id.toString()}     // 'id' is the object property we created st time of filtering data
+          keyExtractor={({ id }, index) => id.toString()}     // 'id' is the object property we created at time of filtering data
           renderItem={({ item }) => (
             <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',padding:6}}>
               <Text>{item.displayName}</Text>    
