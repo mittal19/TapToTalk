@@ -8,17 +8,8 @@ import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroi
 import Contacts from 'react-native-contacts';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
+import {firebaseConfig} from './firebaseConfig';
 
-var firebaseConfig = {
-  apiKey: "AIzaSyCi1keL-EFQAFXooPa0or-XHyOrtu5iSoY",
-  authDomain: "taptotalk-113dd.firebaseapp.com",
-  databaseURL: "https://taptotalk-113dd.firebaseio.com",
-  projectId: "taptotalk-113dd",
-  storageBucket: "taptotalk-113dd.appspot.com",
-  messagingSenderId: "526283056723",
-  appId: "1:526283056723:web:061d836d82fc6305a988a6",
-  measurementId: "G-7HFEC2PNE6"
-};    //make web app in firebase project and copy details here
 if(!firebase.apps.length)
     firebase.initializeApp(firebaseConfig);   //prevent app from intializing again n again
 
