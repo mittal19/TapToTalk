@@ -18,11 +18,11 @@ var firebaseConfig = {
   messagingSenderId: "526283056723",
   appId: "1:526283056723:web:061d836d82fc6305a988a6",
   measurementId: "G-7HFEC2PNE6"
-};
+};    //make web app in firebase project and copy details here
 if(!firebase.apps.length)
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);   //prevent app from intializing again n again
 
-export function contactscomponent()
+export function contactscomponent({navigation})
 {
   
   const [isLoading, setLoading] = useState(true);  //isloading will help in adding activity indicator while contacts are being accessed
@@ -33,7 +33,7 @@ export function contactscomponent()
       async function functionname()   //creating a function with name of 'functionname' 
       {
 
-        const dbref = firebase.database().ref();
+        const dbref = firebase.database().ref();     //setting reference to real time database
 
         if (Platform.OS == 'android') 
         {
@@ -58,7 +58,7 @@ export function contactscomponent()
                                     displayName: contacts[i].displayName, 
                                     phoneNumber: contacts[i].phoneNumbers[0].number, 
                                     profile: "linkhere",
-                                    onWhatsapp : "false"
+                                    onTapToTalk : "false"
                                   }  //making object of information before adding to array
                                 );  // adding valid contacts to data array
                       id++;
@@ -74,17 +74,23 @@ export function contactscomponent()
                 }
               );
 
-              for(var i=0;i<id;i++)
-              {
-                console.log(data[i].phoneNumber);
-                const userdata = await dbref.child('users').child(data[i].phoneNumber).once('value').then(
+              const query = await dbref.child('users');     //setting reference to users document . users document  structure as follows -   users : { "9027504141": { "profile":linkhere ,"status": hey there},"9027504141": { "profile":linkhere ,"status": hey there} } 
+              const usersdata = await query.once('value').then(
                 function(snap)
                 {
-                  snap = snap.val();
-                  return snap;
-                });
-                console.log(userdata);
+                  return snap.val();
+                }
+              )    //saving all users info in usersdata variable
+             
+              for(var i=0;i<id;i++)    //looping to check whether our contacts are present in database or not
+              {
+                if(usersdata[data[i].phoneNumber]!=undefined)          // data[i].phoneNumber represent the contact in our phone . usersdata[data[i].phoneNumber] is checking the contact on our phone is present in usersdata object or not.
+                {
+                  data[i].onTapToTalk = "true";     // if usersdata(our firebase database) have the contact then set on whatsapp to true
+                  data[i].profile = usersdata[data[i].profile];   // setting profile image link
+                }
               }
+              setData(data);   //setting data
             }
             else 
             {
@@ -124,7 +130,7 @@ export function contactscomponent()
           renderItem={({ item }) => (
             <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',padding:6}}>
               <Text>{item.displayName}</Text>    
-              <Text>{item.onWhatsapp}</Text>
+              <Text>{item.onTapToTalk}</Text>
             </View>
           )}
         />
