@@ -8,22 +8,20 @@ import {AuthContext} from '../context';
 export function homecomponent({navigation})
 {
  
-  const {signOut} = React.useContext(AuthContext);
+  const {signOut} = React.useContext(AuthContext);          //accessing auth context function signout created at App.js file
 
-  useEffect(()=>{
-    async function functioname()
+  useEffect(()=>{        //this will be automattically called is similar to component did mount
+    async function functioname()            //creating async function 'functionname' 
     {
-      const userToken = await AsyncStorage.getItem('userToken');
-      const Phonenumber = await AsyncStorage.getItem('Phonenumber');
-      console.log(userToken + " " + Phonenumber);
-      const users = await firebase.firestore().collection('users').get();
-      console.log(users);
+      const userToken = await AsyncStorage.getItem('userToken');           //getting token from local storage
+      const Phonenumber = await AsyncStorage.getItem('Phonenumber');        //getting number from local storage
+      console.log(userToken + " " + Phonenumber);                          
     }
     functioname();
     }, []);
 
-  const checkcontacts = async()=>{
-    navigation.navigate('Contacts');
+  const checkcontacts = async()=>{         //this function will be called when userr click on contacts
+    navigation.navigate('Contacts');  //navigating to contacts component
   }
 
   return(

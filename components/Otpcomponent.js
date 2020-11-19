@@ -5,38 +5,40 @@ import {View,Text,TextInput,TouchableOpacity,ToastAndroid,ActivityIndicator} fro
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import {AuthContext} from '../context';
 
-export function Otpcomponent({route,navigation})
+export function Otpcomponent({route,navigation}) 
 {
-  const {signIn} = React.useContext(AuthContext);
+  const {signIn} = React.useContext(AuthContext);         ///authcontext will get us signin function from app.js screen
 
-  const {Phonenumber,requestId} = route.params;
-  console.log(Phonenumber+" "+requestId);
+  const {Phonenumber,requestId} = route.params;       // getting info from previous screen
   
-  const [otpentered,enterotp] = React.useState(false);
+  const [otpentered,enterotp] = React.useState(false);      //
   const [otp,setotp] = React.useState('');
   const [verifyingotp,verifyotp] = React.useState(false);
 
-  const otpnotrecieved=()=>{
-    ToastAndroid.show('Enter phone number and Try Again',ToastAndroid.LONG);
-    navigation.goBack();
+  const otpnotrecieved=()=>{         //this function gets executed when user press otp not recieved
+    ToastAndroid.show('Enter phone number and Try Again',ToastAndroid.LONG);       //showing toast
+    navigation.goBack();      // going back to previous screen which is phonenumber component
   }
 
-  const checkotp=async()=>{
-    //console.log(otp);
-    if(otp.length==4)
+  const checkotp=async()=>{          //this function will be called when user clicks login
+    if(otp.length==4)                //checking if otp enterd is 4 digit or not
+    { 
+      signIn(requestId,otp,Phonenumber,navigation);       //if otp is properly formatted then send the data to signIn function created at App.js file using authcontext
+    }
+    else
     {
-      signIn(requestId,otp,Phonenumber,navigation); 
+      ToastAndroid.show('Enter all 4 digits',ToastAndroid.LONG); //showing toast to enter proper otp.
     }
   }
 
-  if(verifyingotp==true)
+  /*if(verifyingotp==true)          //displaying activity indicator
   {
     return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
         <ActivityIndicator size="large" color="#000000"/>
       </View>
     );
-  }
+  }*/
 
 
   return(
