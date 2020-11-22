@@ -3,12 +3,15 @@ import {View,ActivityIndicator,ToastAndroid} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AysncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import {AuthContext} from './context';
+
 import {Phonenumbercomponent} from './components/Phonenumbercomponent';
 import {homecomponent} from './components/homecomponent';
 import {Otpcomponent} from './components/Otpcomponent';
 import {contactscomponent} from './components/contactscomponent';
-import AsyncStorage from '@react-native-community/async-storage';
+import {messagecomponent} from './components/messagecomponent';
 
 const Stack = createStackNavigator();    //for creating navigation between screens possible using stack navigator
 
@@ -174,6 +177,7 @@ function App()
         <Stack.Navigator> 
           <Stack.Screen name="Home" component={homecomponent} />
           <Stack.Screen name="Contacts" component={contactscomponent} />
+          <Stack.Screen name="Message" component={messagecomponent} />
         </Stack.Navigator>
       }
       </NavigationContainer>

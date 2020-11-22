@@ -1,14 +1,14 @@
 // THIS COMPONENT WILL RETRIVE CONTACTS FROM DEVICE.
 // THEN FILTER OUT THE UNNECESSARY DATA
 //THEN CHECK WHICH CONTACTS HAVE ACCOUNT ON TAPTOTALK
-
+//THEN USER CAN CLICK ON A CONTACT TO NAVIGATE TO PERSONAL MESSAGE SCREEN OF SELECTED CONTACT
 
 import React,{useEffect,useState} from 'react';
 import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroid,ActivityIndicator, ToastAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
-import {firebaseConfig} from './firebaseConfig';
+import {firebaseConfig} from './firebaseConfig'; ///importing firebase configs from firebaseconfig.js file
 
 if(!firebase.apps.length)
     firebase.initializeApp(firebaseConfig);   //prevent app from intializing again n again
@@ -82,6 +82,7 @@ export function contactscomponent({navigation})
                 }
               }
               setData(data);   //setting data
+              
             }
             else 
             {
@@ -104,6 +105,11 @@ export function contactscomponent({navigation})
 
     },[]);
 
+  const openpersonalmessage = ()=>{            //this function will be called when user clicks on specific contact to begin chatting
+    navigation.pop();  //this will poput current contacts component screen 
+    navigation.navigate('Message');       //this will navigate  to message component
+  }
+
   if(isLoading==true)   // showing activity indicator till contacts are not fetched from device
   {
     return(
@@ -119,10 +125,12 @@ export function contactscomponent({navigation})
           data={data}     // data state we created above
           keyExtractor={({ id }, index) => id.toString()}     // 'id' is the object property we created at time of filtering data
           renderItem={({ item }) => (
-            <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',padding:6}}>
-              <Text>{item.displayName}</Text>    
-              <Text>{item.onTapToTalk}</Text>
-            </View>
+            <TouchableOpacity onPress={openpersonalmessage}>
+              <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',padding:6}}>
+                <Text>{item.displayName}</Text>
+                <Text>{item.onTapToTalk}</Text>
+              </View>
+            </TouchableOpacity>
           )}
         />
     </View>
