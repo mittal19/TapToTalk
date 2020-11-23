@@ -15,8 +15,8 @@ if(!firebase.apps.length)
 export function component_contacts({navigation})
 {
   
-  const [isLoading, setLoading] = useState(true);  //isloading will help in adding activity indicator while contacts are being accessed
-  const [data, setData] = useState([]);  // data will hold contacts
+  const [isLoading, set_isLoading] = useState(true);  //isloading will help in adding activity indicator while contacts are being accessed
+  const [data, set_data] = useState([]);  // data will hold contacts
 
   useEffect(()=>
   {
@@ -59,8 +59,8 @@ export function component_contacts({navigation})
                     return a.displayName.toLowerCase()>b.displayName.toLowerCase();
                   });   // sorting the data array of objects we built above ignoring upper lower case
 
-                  setData(data); // set above data array to context till now we have filtered contacts only not checked whether number is on our database or not.
-                  setLoading(false);  // setting activity indicator to false  
+                  set_data(data); // set above data array to context till now we have filtered contacts only not checked whether number is on our database or not.
+                  set_isLoading(false);  // setting activity indicator to false  
                 }
               );
 
@@ -80,7 +80,7 @@ export function component_contacts({navigation})
                   data[i].profile = usersdata[data[i].profile];   // setting profile image link
                 }
               }
-              setData(data);   //setting data
+              set_data(data);   //setting data
               
             }
             else 

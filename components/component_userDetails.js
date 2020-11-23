@@ -16,17 +16,25 @@ export function component_userDetails({route,navigation})
 
     const function_submitDetails =async()=>
     {
-        if(userName.length<1||userProfile.length<1||userStatus.length<1)
+        try
         {
-            ToastAndroid.show("Enter all details",ToastAndroid.LONG);
+            if(userName.length<1||userProfile.length<1||userStatus.length<1)
+            {
+                ToastAndroid.show("Enter all details",ToastAndroid.LONG);
+            }
+            else
+            {
+                await AsyncStorage.setItem('userNumber',userNumber);
+                await AsyncStorage.setItem('userName',userName);
+                await AsyncStorage.setItem('userStatus',userStatus);
+                await AsyncStorage.setItem('userProfile',userProfile);
+                logIn(userNumber,userName,userStatus,userProfile); 
+            }
         }
-        else
+        catch(e)
         {
-            await AsyncStorage.setItem('userNumber',userNumber);
-            await AsyncStorage.setItem('userName',userName);
-            await AsyncStorage.setItem('userStatus',userStatus);
-            await AsyncStorage.setItem('userProfile',userProfile);
-            logIn(userNumber,userName,userStatus,userProfile,navigation); 
+            ToastAndroid.show("Some error occurred! Try again",ToastAndroid.LONG);
+            navigation.pop();
         }
     }
 

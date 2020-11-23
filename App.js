@@ -1,10 +1,18 @@
+//This App.js file will have stack navigator for navigating between screens
+// First of all when user open app - isLoading var is true so splash screen will show up
+// BY that time useeffect function have settime out function whichh will load data from local storage
+// and set it using dispatcher actions after 1000ms.
+// if userNumber retrieved from local storage is null then enter phone number component will open 
+//else if usernumber is not null then home component will open.
+
+
 import React,{useEffect} from 'react';
-import {View,ActivityIndicator,ToastAndroid} from 'react-native';
+import {View,ActivityIndicator,ToastAndroid,Text} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {AuthContext} from './helpers/context';
+import {AuthContext} from './helpers/context';		
 import {Reduceractions} from './helpers/Reduceractions';    
 import {initialLogin} from './helpers/initialLogin';
 
@@ -20,49 +28,45 @@ const Stack = createStackNavigator();    //for creating navigation between scree
 function App()
 {
   
-  const [loginState,dispatch] = React.useReducer(Reduceractions,initialLogin);   //intializing reducer
+  const [loginState,dispatch] = React.useReducer(Reduceractions,initialLogin);   //intializing reducer , Reduceractions imported, initialLogin imported
 
-  const authContext = React.useMemo(()=>({        //creating authcontext .. the function created here will be accessible all in the app
-    
-          logIn: async(userNumber,userName,userStatus,userProfile,navigation)=> 
-          {      
-            dispatch({type:'LOGIN',userNumber:userNumber,userName:userName,userStatus:userStatus,userProfile:userProfile});
-          },
+  const authContext = React.useMemo(()=>      //creating authcontext .. the functions created here will be accessible all in the app
+  ({        
+		logIn: async(userNumber,userName,userStatus,userProfile)=> // this function will be called by userDetails component 
+		{      
+			dispatch({type:'LOGIN',userNumber:userNumber,userName:userName,userStatus:userStatus,userProfile:userProfile});  // calling dispatcher action for login ... this action is in ./helpers/Reduceractions
+		},
 
-          logOut: async()=> 
-          {   //for signing user out
-    
-            try
-            {
-              //removing usertoken and phone number from local storage
-              await  AsyncStorage.removeItem('userNumber');
-              await  AsyncStorage.removeItem('userStatus');
-              await  AsyncStorage.removeItem('userName');
-              await  AsyncStorage.removeItem('userProfile');
-              dispatch({type:'LOGOUT'});
-            } 
-            catch(e)
-            {
-              ToastAndroid.show("Some error occurred! Try again",ToastAndroid.LONG);
-            }
-          },
+		logOut: async()=>		//for signing user out 
+		{   
+			try				//removing usernumber,status.. from local storage
+			{ 
+				await  AsyncStorage.removeItem('userNumber');
+				await  AsyncStorage.removeItem('userStatus');
+				await  AsyncStorage.removeItem('userName');
+				await  AsyncStorage.removeItem('userProfile');
+				dispatch({type:'LOGOUT'});           //calling dispatcher action for logging out ... this action is in ./helpers/Reduceractions 
+			} 
+			catch(e)
+			{
+				ToastAndroid.show("Some error occurred! Try again",ToastAndroid.LONG);
+			}
+		},
 
   }),[]);
 
-  useEffect(()=>
-  {             //this will be automattically called is similar to component did mount
-     
+  useEffect(()=>  //this will be automattically called is similar to component did mount
+  {            
     setTimeout(async()=>
     {
-    
-      let userNumber = null;      //will store phonenumber
+      let userNumber = null;      //these variales will store data from local storage  
       let userName = null;
       let userProfile = null;
       let userStatus = null;
       
       try
       {
-        userNumber = await AsyncStorage.getItem('userNumber');      //getting phonenumber from storage
+        userNumber = await AsyncStorage.getItem('userNumber');      //getting phonenumber,name,profile,status from storage
         userName = await AsyncStorage.getItem('userName');
         userProfile = await AsyncStorage.getItem('userProfile');
         userStatus = await AsyncStorage.getItem('userStatus');
@@ -72,26 +76,25 @@ function App()
         console.log(e);       //showing error
       }
       
-      dispatch({type:'RETRIEVE_STORED_DATA',userNumber:userNumber,userName:userName,userProfile:userProfile,userStatus:userStatus});       //calling the reducer function we created above
+      dispatch({type:'RETRIEVE_STORED_DATA',userNumber:userNumber,userName:userName,userProfile:userProfile,userStatus:userStatus});        //calling dispatcher action for setting the data retrived ... this action is in ./helpers/Reduceractions 
     
-    },1000);    //settime out of 1000ms is just for showing activity indicator...no real use here of settimeout 
+    },1000);    //settime out of 1000ms is just for showing splash screen
 
   },[]);
 
 
 
-  if(loginState.isLoading)          //displaying activity indicator of isloading is true
+  if(loginState.isLoading)          //displaying splash screen till isLoading is true
   {
     return(
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-        <ActivityIndicator size="large" color="#000000"/>
+		<Text>SPLASH SCREEN</Text>
       </View>
     );
   }
 
-  //if usertoken is null then we have to  show phone number screen 
-  //if usertoken is not null then we have to show home component
-   
+  //if userNumber is null then show login process else show loggedin screens 
+
   return(
     <AuthContext.Provider value={authContext}> 
       <NavigationContainer>
