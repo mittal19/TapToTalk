@@ -1,4 +1,8 @@
-import React,{useEffect} from 'react';
+//here we are taking phone number input from user
+//then sending otp using fetch .. api is created...see expressbackend for api details.
+//if otp is sent then navigate to otp screen
+
+import React from 'react';
 import {View,Text,TextInput,TouchableOpacity,ToastAndroid,ActivityIndicator} from 'react-native';
 
 export function component_userNumber({navigation})
@@ -32,7 +36,7 @@ export function component_userNumber({navigation})
                             });
         const requestId= await temp.json();
         console.log(requestId);*/
-        const requestId = 24325;   //temporary 
+        const requestId = 24325;   //temporary  will be removed when above code is uncommented
         ToastAndroid.show("OTP sent",ToastAndroid.SHORT);  //otp sent success
         set_sendingOtp(false);     //now setting activityindicator to false n thus hiding it.
         navigation.navigate('OTP',{userNumber:userNumber,requestId:requestId});      //navigating to OTP screen. passing some information like phonenumber and requestID to next screen

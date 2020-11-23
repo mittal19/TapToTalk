@@ -1,4 +1,4 @@
-const initialLogin =        //creating pbject with following properties
+const initialLogin =        //creating object with following properties
   {
     isLoading:true,           //for showing/hiding activity indicator
     userNumber:null,            //for storing phone number
