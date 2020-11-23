@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const port = process.env.PORT || 3000
 const Nexmo = require('nexmo');
-const config = require('./nexmoapis');
+const config = require('./nexmoapis');           //import keys 
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json())
@@ -17,10 +17,9 @@ app.get('/', (req, res) => {
     res.send({message: "Hello, world!"});
 });
 
-app.post('/request', (req, res) => {
+app.post('/request', (req, res) => {     //this will be called when send otp api is called
     
-    if (!req.body.number) {
-        console.log('requested3');
+    if (!req.body.number) {            //if request body doesn't have number
         res.status(400).send({message: "You must supply a `number` prop to send the request to"})
         return;
     }
@@ -44,12 +43,14 @@ app.post('/request', (req, res) => {
     });
 })
 
-app.post('/verify', (req, res) => {
+app.post('/verify', (req, res) => {        //we be called when verify otp api is called 
     // We require clients to submit a request id (for identification) and a code (to check)
+
     if (!req.body.requestId || !req.body.code) {
         res.status(400).send({message: "You must supply a `code` and `request_id` prop to send the request to"})
         return;
     }
+    
     // Run the check against Vonage's servers
     nexmo.verify.check({
         request_id: req.body.requestId,
