@@ -6,14 +6,13 @@
 import React,{useEffect,useState} from 'react';
 import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroid,ActivityIndicator, ToastAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
-import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
 import {firebaseConfig} from './firebaseConfig'; ///importing firebase configs from firebaseconfig.js file
 
 if(!firebase.apps.length)
     firebase.initializeApp(firebaseConfig);   //prevent app from intializing again n again
 
-export function contactscomponent({navigation})
+export function component_contacts({navigation})
 {
   
   const [isLoading, setLoading] = useState(true);  //isloading will help in adding activity indicator while contacts are being accessed

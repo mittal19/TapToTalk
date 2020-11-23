@@ -1,9 +1,7 @@
 import React, { Component } from 'react';  
  import { Platform, StyleSheet, View, Text,  Image, TouchableOpacity, Alert } from 'react-native';  
 
-function
-
- export default class App extends Component  
+export default class App extends Component  
 {  
    constructor(){  
      super();  
