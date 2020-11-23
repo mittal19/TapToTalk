@@ -105,9 +105,9 @@ export function contactscomponent({navigation})
 
     },[]);
 
-  const openpersonalmessage = ()=>{            //this function will be called when user clicks on specific contact to begin chatting
+  const openpersonalmessage = (item)=>{            //this function will be called when user clicks on specific contact to begin chatting
     navigation.pop();  //this will poput current contacts component screen 
-    navigation.navigate('Message');       //this will navigate  to message component
+    navigation.navigate('Message',{item});       //this will navigate  to message component
   }
 
   if(isLoading==true)   // showing activity indicator till contacts are not fetched from device
@@ -125,7 +125,7 @@ export function contactscomponent({navigation})
           data={data}     // data state we created above
           keyExtractor={({ id }, index) => id.toString()}     // 'id' is the object property we created at time of filtering data
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={openpersonalmessage}>
+            <TouchableOpacity onPress={()=>openpersonalmessage(item)}>
               <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',padding:6}}>
                 <Text>{item.displayName}</Text>
                 <Text>{item.onTapToTalk}</Text>

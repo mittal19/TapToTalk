@@ -5,63 +5,26 @@ import AysncStorage from '@react-native-community/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {AuthContext} from './context';
+import {AuthContext} from './helpers/context';
+import {Reduceractions} from './helpers/Reduceractions';
+import {initialLogin} from './helpers/initialLogin';
 
 import {Phonenumbercomponent} from './components/Phonenumbercomponent';
 import {homecomponent} from './components/homecomponent';
 import {Otpcomponent} from './components/Otpcomponent';
 import {contactscomponent} from './components/contactscomponent';
 import {messagecomponent} from './components/messagecomponent';
+import {enter_userdetails} from './components/enter_userdetails';
 
 const Stack = createStackNavigator();    //for creating navigation between screens possible using stack navigator
 
 function App()
 {
-  const initialLogin =        //creating pbject with following properties
-  {
-    isLoading:true,           //for showing/hiding activity indicator
-    Phonenumber:null,            //for storing phone number
-    userToken:null     //for storing usertoken
-  };
-
-  const loginReducer = (prevState,action)=>
-  {
-    switch(action.type)
-    {
-      case 'RETRIEVE_TOKEN':      //when token and phone number is retrieved from storage this is called
-        return {
-          ...prevState,     //all previous states will remain as it is
-          userToken:action.token,   //setting token
-          isLoading:false,         //hiding activity indicator
-          Phonenumber:action.id    //setting phone number
-        };
-      case 'LOGIN':          //when otp is verified ..this is called
-        return {
-          ...prevState,    //all previous states will remain as it is
-          userToken:action.token,                
-          isLoading:false,
-          Phonenumber:action.id
-        };
-      case 'LOGOUT':                //when logging out this is called
-        return {
-          ...prevState,    //all previous states will remain as it is
-          userToken:null,
-          isLoading:false,
-          Phonenumber:null
-        };
-      case 'REGISTER':
-        return {
-          ...prevState,
-          userToken:action.token,
-          isLoading:false,
-          Phonenumber:action.id
-        };
-    }
-  };
-
-  const [loginState,dispatch] = React.useReducer(loginReducer,initialLogin);   //intializing reducer
+  
+  const [loginState,dispatch] = React.useReducer(Reduceractions,initialLogin);   //intializing reducer
 
   const authContext = React.useMemo(()=>({        //creating authcontext .. the function created here will be accessible all in the app
+    
     signIn: async(requestId,otp,Phonenumber,navigation)=> {          //signIn function for signing user in
       let userToken;
       userToken = null;
@@ -93,6 +56,8 @@ function App()
           userToken='weef';         //manually setting usertoken ..to store in local storage...actually i can delete whole use of usertoken but anyways
           await AysncStorage.setItem('userToken',userToken);  //setting usertoken to phone storage
           await AsyncStorage.setItem('Phonenumber',Phonenumber);  //setting number to ''    ''
+
+          dispatch({type:'LOGIN',id:Phonenumber,token:userToken});   // reducer function we created above is called now for setting values
         }
         else if(res.status==16&&res.error_text=="The code provided does not match the expected value")
         {
@@ -112,8 +77,8 @@ function App()
         navigation.goBack();  //error occurred . go back n try again
       }
 
-      dispatch({type:'LOGIN',id:Phonenumber,token:userToken});   // reducer function we created above is called now for setting values
     },
+
     signOut: async()=> {   //for signing user out
      
       try{
@@ -125,10 +90,12 @@ function App()
 
       dispatch({type:'LOGOUT'});
     },
+
     signUp:() =>{        //for signing user up .. but i dont think its of use .. might remove later..please check future me
       setUserToken('sdfg');
       setIsLoading(false);
     }
+
   }),[]);
 
   useEffect(()=>{             //this will be automattically called is similar to component did mount
@@ -164,7 +131,7 @@ function App()
 
   //if usertoken is null then we have to  show phone number screen 
   //if usertoken is not null then we have to show home component
-
+  // <Stack.Screen name="Enter Details" component={enter_userdetails} />   
   return(
     <AuthContext.Provider value={authContext}> 
       <NavigationContainer>
@@ -175,6 +142,7 @@ function App()
         </Stack.Navigator>
         :
         <Stack.Navigator> 
+              
           <Stack.Screen name="Home" component={homecomponent} />
           <Stack.Screen name="Contacts" component={contactscomponent} />
           <Stack.Screen name="Message" component={messagecomponent} />

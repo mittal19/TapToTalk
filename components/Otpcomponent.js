@@ -3,7 +3,7 @@
 import React,{Component} from 'react';
 import {View,Text,TextInput,TouchableOpacity,ToastAndroid,ActivityIndicator} from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {AuthContext} from '../context';
+import {AuthContext} from '../helpers/context';
 
 export function Otpcomponent({route,navigation}) 
 {
