@@ -87,8 +87,8 @@ function App()
   if(loginState.isLoading)          //displaying splash screen till isLoading is true
   {
     return(
-      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-		<Text>SPLASH SCREEN</Text>
+      <View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:'#000000'}}>
+		<Text style={{color:'#ffffff'}}>SPLASH SCREEN</Text>
       </View>
     );
   }

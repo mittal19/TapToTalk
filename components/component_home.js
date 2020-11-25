@@ -18,7 +18,6 @@ export function component_home({navigation})
       <Text>HOME</Text>
       <TouchableOpacity onPress={checkcontacts} ><Text>CONTACTS</Text></TouchableOpacity>
       <TouchableOpacity onPress={logOut}><Text>Logout</Text></TouchableOpacity>
-      
     </View>
   );
 
