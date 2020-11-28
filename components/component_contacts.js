@@ -6,11 +6,7 @@
 import React,{useEffect,useState} from 'react';
 import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroid,ActivityIndicator, ToastAndroid} from 'react-native';
 import Contacts from 'react-native-contacts';
-import * as firebase from 'firebase';
-import {firebaseConfig} from './firebaseConfig'; ///importing firebase configs from firebaseconfig.js file
-
-if(!firebase.apps.length)
-    firebase.initializeApp(firebaseConfig);   //prevent app from intializing again n again
+import {firebase} from './firebaseConfig'; ///importing firebase configs from firebaseconfig.js file
 
 export function component_contacts({navigation})
 {

@@ -5,7 +5,7 @@
 // if userNumber retrieved from local storage is null then enter phone number component will open 
 //else if usernumber is not null then home component will open.
 
-
+ 
 import React,{useEffect} from 'react';
 import {View,ActivityIndicator,ToastAndroid,Text} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {AuthContext} from './helpers/context';		
 import {Reduceractions} from './helpers/Reduceractions';    
 import {initialLogin} from './helpers/initialLogin';
+import {firebase} from './components/firebaseConfig';
 
 import {component_userNumber} from './components/component_userNumber';
 import {component_home} from './components/component_home';
@@ -34,7 +35,13 @@ function App()
   ({        
 		logIn: async(userNumber,userName,userStatus,userProfile)=> // this function will be called by userDetails component 
 		{      
-			dispatch({type:'LOGIN',userNumber:userNumber,userName:userName,userStatus:userStatus,userProfile:userProfile});  // calling dispatcher action for login ... this action is in ./helpers/Reduceractions
+      dispatch({type:'LOGIN',userNumber:userNumber,userName:userName,userStatus:userStatus,userProfile:userProfile});  // calling dispatcher action for login ... this action is in ./helpers/Reduceractions
+      var database = firebase.database();
+      var userdetailed={};
+      userdetailed['/users/'+userNumber+'/userName']=userName;
+      userdetailed['/users/'+userNumber+'/userProfile']=userProfile;
+      userdetailed['/users/'+userNumber+'/userStatus']=userStatus;
+      console.log(await database.ref().update(userdetailed));  
 		},
 
 		logOut: async()=>		//for signing user out 
