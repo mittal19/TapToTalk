@@ -58,7 +58,7 @@ function App()
 			{
 				ToastAndroid.show("Some error occurred! Try again",ToastAndroid.LONG);
 			}
-		},
+    },
 
   }),[]);
 

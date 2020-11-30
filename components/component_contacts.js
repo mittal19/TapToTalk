@@ -8,8 +8,10 @@ import {View,Text,TextInput,TouchableOpacity,FlatList,Platform,PermissionsAndroi
 import Contacts from 'react-native-contacts';
 import {firebase} from './firebaseConfig'; ///importing firebase configs from firebaseconfig.js file
 
-export function component_contacts({navigation})
+export function component_contacts({route,navigation})
 {
+
+  const userNumber = route.params;
   
   const [isLoading, set_isLoading] = useState(true);  //isloading will help in adding activity indicator while contacts are being accessed
   const [data, set_data] = useState([]);  // data will hold contacts
@@ -41,9 +43,9 @@ export function component_contacts({navigation})
                       data.push(
                                   { 
                                     id:id, 
-                                    displayName: contacts[i].displayName, 
-                                    phoneNumber: contacts[i].phoneNumbers[0].number, 
-                                    profile: "linkhere",
+                                    userName: contacts[i].displayName, 
+                                    userNumber: contacts[i].phoneNumbers[0].number, 
+                                    userprofile: "linkhere",
                                     onTapToTalk : "false"
                                   }  //making object of information before adding to array
                                 );  // adding valid contacts to data array
@@ -52,7 +54,7 @@ export function component_contacts({navigation})
                   }
                    
                   data.sort(function(a, b){
-                    return a.displayName.toLowerCase()>b.displayName.toLowerCase();
+                    return a.userName.toLowerCase()>b.userName.toLowerCase();
                   });   // sorting the data array of objects we built above ignoring upper lower case
 
                   set_data(data); // set above data array to context till now we have filtered contacts only not checked whether number is on our database or not.
@@ -70,10 +72,10 @@ export function component_contacts({navigation})
              
               for(var i=0;i<id;i++)    //looping to check whether our contacts are present in database or not
               {
-                if(usersdata[data[i].phoneNumber]!=undefined)          // data[i].phoneNumber represent the contact in our phone . usersdata[data[i].phoneNumber] is checking the contact on our phone is present in usersdata object or not.
+                if(usersdata[data[i].userNumber]!=undefined)          // data[i].phoneNumber represent the contact in our phone . usersdata[data[i].phoneNumber] is checking the contact on our phone is present in usersdata object or not.
                 {
                   data[i].onTapToTalk = "true";     // if usersdata(our firebase database) have the contact then set on whatsapp to true
-                  data[i].profile = usersdata[data[i].profile];   // setting profile image link
+                  data[i].userprofile = usersdata[data[i].profile];   // setting profile image link
                 }
               }
               set_data(data);   //setting data
@@ -101,8 +103,15 @@ export function component_contacts({navigation})
     },[]);
 
   const openpersonalmessage = (item)=>{            //this function will be called when user clicks on specific contact to begin chatting
-    navigation.pop();  //this will poput current contacts component screen 
-    navigation.navigate('Message',{item});       //this will navigate  to message component
+    if(item.onTapToTalk=="false")       //checking if the contact user clicked on is on taptotalk or not
+    {
+      ToastAndroid.show("Not on TapToTalk! Invite them here.",ToastAndroid.LONG);        //if not then show this
+    }
+    else  //if user is on taptotalk
+    {
+      navigation.pop();  //this will poput current contacts component screen 
+      navigation.navigate('Message',{item,userNumber});       //this will navigate  to message component
+    }
   }
 
   if(isLoading==true)   // showing activity indicator till contacts are not fetched from device
@@ -122,7 +131,7 @@ export function component_contacts({navigation})
           renderItem={({ item }) => (
             <TouchableOpacity onPress={()=>openpersonalmessage(item)}>
               <View style={{flex:1,flexDirection:'row',justifyContent:'space-between',padding:6}}>
-                <Text>{item.displayName}</Text>
+                <Text>{item.userName}</Text>
                 <Text>{item.onTapToTalk}</Text>
               </View>
             </TouchableOpacity>
